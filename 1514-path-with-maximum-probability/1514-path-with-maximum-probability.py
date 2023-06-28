@@ -11,33 +11,34 @@ class Solution:
             
         max_prob = [0.0] * n
         max_prob[start] = 1.0
-            
-#         def dijkstra(start):
-#             q = []
-#             heapq.heappush(q, (1, start))
-#             p[start] = 1
-            
-#             while q:
-#                 prop, now = heapq.heappop(q)
-#                 if p[now] > prop:
-#                     continue
-#                 for i in graph[now]:
-#                     cost = prop * i[1]
-#                     if cost > p[i[0]]:
-#                         p[i[0]] = cost
-#                         heapq.heappush(q, (cost, i[0]))
-        
-#         dijkstra(start)
+        q = []
+        heapq.heappush(q, (-1, start))
+        max_prob[start] = 1
 
-        pq = [(-1.0, start)]
+        while q:
+            prop, now = heapq.heappop(q)
+            if now == end:
+                return -prop
+            if max_prob[now] > -prop:
+                continue
+            for nxt_node, path_prob in graph[now]:
+                cost = -prop * path_prob
+                if cost > max_prob[nxt_node]:
+                    max_prob[nxt_node] = cost
+                    heapq.heappush(q, (-cost, nxt_node))
         
-        while pq:
-            cur_prob, cur_node = heapq.heappop(pq)
-            if cur_node == end:
-                return -cur_prob
-            for nxt_node, path_prob in graph[cur_node]:
-                if -cur_prob * path_prob > max_prob[nxt_node]:
-                    max_prob[nxt_node] = -cur_prob * path_prob
-                    heapq.heappush(pq, (-max_prob[nxt_node], nxt_node))
+        return 0
         
-        return 0.0
+
+#         pq = [(-1.0, start)]
+        
+#         while pq:
+#             cur_prob, cur_node = heapq.heappop(pq)
+#             if cur_node == end:
+#                 return -cur_prob
+#             for nxt_node, path_prob in graph[cur_node]:
+#                 if -cur_prob * path_prob > max_prob[nxt_node]:
+#                     max_prob[nxt_node] = -cur_prob * path_prob
+#                     heapq.heappush(pq, (-max_prob[nxt_node], nxt_node))
+        
+#         return 0.0
